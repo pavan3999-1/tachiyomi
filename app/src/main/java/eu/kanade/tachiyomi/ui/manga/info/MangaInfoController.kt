@@ -31,6 +31,7 @@ import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.preference.getOrDefault
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
@@ -70,6 +71,8 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
      * Preferences helper.
      */
     private val preferences: PreferencesHelper by injectLazy()
+
+    val dateFormat: DateFormat = preferences.dateFormat().getOrDefault()
 
     init {
         setHasOptionsMenu(true)
@@ -273,7 +276,7 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
 
     fun setLastUpdateDate(date: Date) {
         if (date.time != 0L) {
-            manga_last_update?.text = DateFormat.getDateInstance(DateFormat.SHORT).format(date)
+            manga_last_update?.text = dateFormat.format(date)
         } else {
             manga_last_update?.text = resources?.getString(R.string.unknown)
         }
