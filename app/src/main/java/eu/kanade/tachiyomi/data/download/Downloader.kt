@@ -140,7 +140,7 @@ class Downloader(
             } else if (notifier.isSingleChapter && !notifier.errorThrown) {
                 notifier.isSingleChapter = false
             } else {
-                notifier.dismiss()
+                notifier.downloadFinished()
             }
         }
     }
