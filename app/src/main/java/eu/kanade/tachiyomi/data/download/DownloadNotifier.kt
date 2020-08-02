@@ -188,7 +188,7 @@ internal class DownloadNotifier(private val context: Context) {
     /**
      * Show notification when download is paused.
      */
-    fun onDownloadPaused() {
+    fun onPaused() {
         with(notification) {
             setContentTitle(context.getString(R.string.chapter_paused))
             setContentText(context.getString(R.string.download_notifier_download_paused))
@@ -221,7 +221,7 @@ internal class DownloadNotifier(private val context: Context) {
      *
      * @param download download object containing download information.
      */
-    fun onDownloadCompleted(download: Download, queue: DownloadQueue) {
+    fun onComplete(download: Download, queue: DownloadQueue) {
         // Check if last download
         if (!queue.isEmpty()) {
             return
@@ -238,6 +238,8 @@ internal class DownloadNotifier(private val context: Context) {
             clearActions()
             setContentIntent(NotificationReceiver.openChapterPendingBroadcast(context, download.manga, download.chapter))
             setProgress(0, 0, false)
+            }
+            notification.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
         }
 
         // Show notification.

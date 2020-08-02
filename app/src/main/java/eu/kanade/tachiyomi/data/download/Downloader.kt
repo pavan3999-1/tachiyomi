@@ -136,11 +136,11 @@ class Downloader(
         } else {
             if (notifier.paused) {
                 notifier.paused = false
-                notifier.onDownloadPaused()
+                notifier.onPaused()
             } else if (notifier.isSingleChapter && !notifier.errorThrown) {
                 notifier.isSingleChapter = false
             } else {
-                notifier.downloadFinished()
+                notifier.onComplete()
             }
         }
     }
@@ -454,7 +454,7 @@ class Downloader(
         }
         if (areAllDownloadsFinished()) {
             if (notifier.isSingleChapter && !notifier.errorThrown) {
-                notifier.onDownloadCompleted(download, queue)
+                notifier.onComplete(download, queue)
             }
             DownloadService.stop(context)
         }
