@@ -189,8 +189,17 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> ReaderSettingsSheet(this).show()
-            R.id.action_custom_filter -> ReaderColorFilterSheet(this).show()
-            else -> return super.onOptionsItemSelected(item)
+            R.id.action_custom_filter -> {
+                val sheet = ReaderColorFilterSheet(this)
+                    // Remove dimmed backdrop so changes can be previewed
+                    .apply { window?.setDimAmount(0f) }
+
+                // Hide toolbars while sheet is open for better preview
+                sheet.setOnDismissListener { setMenuVisibility(true) }
+                setMenuVisibility(false)
+
+                sheet.show()
+            }
         }
         return true
     }

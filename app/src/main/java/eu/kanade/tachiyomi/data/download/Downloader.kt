@@ -136,11 +136,11 @@ class Downloader(
         } else {
             if (notifier.paused) {
                 notifier.paused = false
-                notifier.onDownloadPaused()
+                notifier.onPaused()
             } else if (notifier.isSingleChapter && !notifier.errorThrown) {
                 notifier.isSingleChapter = false
             } else {
-                notifier.downloadFinished()
+                notifier.onComplete()
             }
         }
     }
