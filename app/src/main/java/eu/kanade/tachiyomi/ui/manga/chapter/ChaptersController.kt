@@ -270,8 +270,6 @@ class ChaptersController : NucleusController<ChaptersPresenter>(),
         } else {
             selectedItems.remove(item)
         }
-        // Only show action_select_between when there are two chapters selected.
-        actionMode?.menu?.findItem(R.id.action_select_between)?.isVisible = (selectedItems.size == 2)
         actionMode?.invalidate()
     }
 
@@ -355,15 +353,20 @@ class ChaptersController : NucleusController<ChaptersPresenter>(),
     private fun selectBetween() {
         val adapter = adapter ?: return
         if (selectedItems.size == 2) {
-            var first = adapter.items.indexOf(selectedItems.first())
-            var last = adapter.items.indexOf(selectedItems.last())
+            val first = adapter.items.indexOf(selectedItems.first())
+            val last = adapter.items.indexOf(selectedItems.last())
             if (first > last) {
-                first = last.also { last = first }
+                selectedItems.clear()
+                selectedItems.addAll(adapter.items.subList(last, first + 1))
+                selectedItems.forEach { adapter.addSelection(adapter.items.indexOf(it)) }
+                adapter.notifyDataSetChanged()
+
+            } else {
+                selectedItems.clear()
+                selectedItems.addAll(adapter.items.subList(first, last + 1))
+                selectedItems.forEach { adapter.addSelection(adapter.items.indexOf(it)) }
+                adapter.notifyDataSetChanged()
             }
-            selectedItems.clear()
-            selectedItems.addAll(adapter.items.subList(first, last + 1))
-            selectedItems.forEach { adapter.addSelection(adapter.items.indexOf(it)) }
-            adapter.notifyDataSetChanged()
             actionMode?.invalidate()
         }
     }
