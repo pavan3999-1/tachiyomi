@@ -189,16 +189,6 @@ class Downloader(
                     threadsSubject.onNext(it)
                     notifier.multipleDownloadThreads = it > 1
                 }
-            // Concurrently download from 5 different sources
-                .groupBy { it.source }
-                .flatMap(
-                { bySource ->
-                    bySource.concatMap { download ->
-                        downloadChapter(download).subscribeOn(Schedulers.io())
-                    }
-                },
-                5
-            )
 
         subscriptions += downloadsRelay.flatMap { Observable.from(it) }
                 .lift(DynamicConcurrentMergeOperator<Download, Download>({ downloadChapter(it) }, threadsSubject))
