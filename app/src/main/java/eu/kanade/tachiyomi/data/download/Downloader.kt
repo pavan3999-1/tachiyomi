@@ -304,7 +304,7 @@ class Downloader(
                 // Get all the URLs to the source images, fetch pages if necessary
                 .flatMap { download.source.fetchAllImageUrlsFromPageList(it) }
                 // Start downloading images, consider we can have downloaded images already
-                .flatMap({ page -> getOrDownloadImage(page, download, tmpDir) }, 5)
+                .concatMap { page -> getOrDownloadImage(page, download, tmpDir) }
                 // Do when page is downloaded.
                 .doOnNext { notifier.onProgressChange(download, queue) }
                 .toList()
