@@ -189,6 +189,16 @@ class Downloader(
                     threadsSubject.onNext(it)
                     notifier.multipleDownloadThreads = it > 1
                 }
+            // Concurrently download from 5 different sources
+                .groupBy { it.source }
+                .flatMap(
+                { bySource ->
+                    bySource.concatMap { download ->
+                        downloadChapter(download).subscribeOn(Schedulers.io())
+                    }
+                },
+                5
+            )
 
         subscriptions += downloadsRelay.flatMap { Observable.from(it) }
                 .lift(DynamicConcurrentMergeOperator<Download, Download>({ downloadChapter(it) }, threadsSubject))
@@ -304,7 +314,7 @@ class Downloader(
                 // Get all the URLs to the source images, fetch pages if necessary
                 .flatMap { download.source.fetchAllImageUrlsFromPageList(it) }
                 // Start downloading images, consider we can have downloaded images already
-                .concatMap { page -> getOrDownloadImage(page, download, tmpDir) }
+                .flatMap({ page -> getOrDownloadImage(page, download, tmpDir) }, 5)
                 // Do when page is downloaded.
                 .doOnNext { notifier.onProgressChange(download, queue) }
                 .toList()
