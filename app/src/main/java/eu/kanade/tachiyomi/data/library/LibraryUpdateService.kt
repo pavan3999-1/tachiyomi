@@ -281,46 +281,29 @@ class LibraryUpdateService(
 
         // Emit each manga and update it sequentially.
         return Observable.from(mangaToUpdate)
-            // Update the chapters of the manga concurrently from 5 different sources
-            .groupBy { it.source }
-            .flatMap(
-                { bySource ->
-                    bySource
-                        // Notify manga that will update.
-                        .doOnNext { showProgressNotification(it, count.andIncrement, mangaToUpdate.size) }
-                        .concatMap { manga ->
-                            updateManga(manga)
-                                // If there's any error, return empty update and continue.
-                                .onErrorReturn {
-                                    failedUpdates.add(manga)
-                                    Pair(emptyList(), emptyList())
+                // Notify manga that will update.
+                .doOnNext { showProgressNotification(it, count.andIncrement, mangaToUpdate.size) }
+                // Update the chapters of the manga.
+                .concatMap { manga ->
+                    updateManga(manga)
+                            // If there's any error, return empty update and continue.
+                            .onErrorReturn {
+                                failedUpdates.add(manga)
+                                Pair(emptyList(), emptyList())
+                            }
+                            // Filter out mangas without new chapters (or failed).
+                            .filter { pair -> pair.first.isNotEmpty() }
+                            .doOnNext {
+                                if (downloadNew && (categoriesToDownload.isEmpty() ||
+                                        manga.category in categoriesToDownload)) {
+
+                                    downloadChapters(manga, it.first)
+                                    hasDownloads = true
                                 }
-                                // Filter out mangas without new chapters (or failed).
-                                .filter { pair -> pair.first.isNotEmpty() }
-                                .doOnNext {
-                                    if (downloadNew && (
-                                        categoriesToDownload.isEmpty() ||
-                                            manga.category in categoriesToDownload
-                                        )
-                                    ) {
-                                        downloadChapters(manga, it.first)
-                                        hasDownloads = true
-                                    }
-                                }
-                                // Convert to the manga that contains new chapters.
-                                .map {
-                                    Pair(
-                                        manga,
-                                        (
-                                            it.first.sortedByDescending { ch -> ch.source_order }
-                                                .toTypedArray()
-                                            )
-                                    )
-                                }
-                        }
-                },
-                5
-            )
+                            }
+                            // Convert to the manga that contains new chapters.
+                            .map { manga }
+                }
                 // Add manga with new chapters to the list.
                 .doOnNext { manga ->
                     // Add to the list
@@ -379,28 +362,21 @@ class LibraryUpdateService(
 
         // Emit each manga and update it sequentially.
         return Observable.from(mangaToUpdate)
-            // Update the details of the manga concurrently from 5 different sources
-            .groupBy { it.source }
-            .flatMap(
-                { bySource ->
-                    bySource
-                        // Notify manga that will update.
-                        .doOnNext { showProgressNotification(it, count.andIncrement, mangaToUpdate.size) }
-                        .concatMap { manga ->
-                            val source = sourceManager.get(manga.source) as? HttpSource
-                                ?: return@concatMap Observable.empty<LibraryManga>()
+                // Notify manga that will update.
+                .doOnNext { showProgressNotification(it, count.andIncrement, mangaToUpdate.size) }
+                // Update the details of the manga.
+                .concatMap { manga ->
+                    val source = sourceManager.get(manga.source) as? HttpSource
+                            ?: return@concatMap Observable.empty<LibraryManga>()
 
-                            source.fetchMangaDetails(manga)
-                                .map { networkManga ->
-                                    manga.copyFrom(networkManga)
-                                    db.insertManga(manga).executeAsBlocking()
-                                    manga
-                                }
-                                .onErrorReturn { manga }
-                        }
-                },
-                5
-            )
+                    source.fetchMangaDetails(manga)
+                            .map { networkManga ->
+                                manga.copyFrom(networkManga)
+                                db.insertManga(manga).executeAsBlocking()
+                                manga
+                            }
+                            .onErrorReturn { manga }
+                }
                 .doOnCompleted {
                     cancelProgressNotification()
                 }
