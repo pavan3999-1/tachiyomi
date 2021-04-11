@@ -4,12 +4,10 @@ on:
   push:
     paths-ignore:
       - '*.md'
-      - '*.yml'
     branches: [ 0.8.5-ss ]
   pull_request:
     paths-ignore:
       - '*.md'
-      - '*.yml'
     branches: [ 0.8.5-ss ]
 
 jobs:
