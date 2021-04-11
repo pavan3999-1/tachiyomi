@@ -1,14 +1,20 @@
 name: CI
 on:
+  push:
+    branches:
+      - test
+    tags:
+      - v*
+  pull_request:
   workflow_dispatch:
   push:
     paths-ignore:
       - '*.md'
-    branches: [ 0.8.5-ss ]
+    branches: [ test ]
   pull_request:
     paths-ignore:
       - '*.md'
-    branches: [ 0.8.5-ss ]
+    branches: [ test ]
 
 jobs:
   check_wrapper:
