@@ -57,7 +57,7 @@ class LibraryGridHolder(
         GlideApp.with(view.context)
                 .load(item.manga)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                ..apply(requestOptions)
+                .apply(requestOptions)
                 .dontAnimate()
                 .into(thumbnail)
     }

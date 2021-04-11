@@ -34,7 +34,7 @@ class MangaHolder(
         GlideApp.with(itemView.context)
                 .load(item.manga)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .apply(requestOptions)circleCrop()
+                .apply(requestOptions)
                 .dontAnimate()
                 .into(thumbnail)
     }
