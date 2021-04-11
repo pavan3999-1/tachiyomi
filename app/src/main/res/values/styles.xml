@@ -162,7 +162,6 @@
         <item name="android:layout_marginEnd">@dimen/material_component_cards_space_between_cards
         </item>
         <item name="cardBackgroundColor">?attr/background_card</item>
-      <item name="cardCornerRadius">@dimen/card_radius</item>
         <item name="cardElevation">2dp</item>
     </style>
 

@@ -3,9 +3,6 @@ package eu.kanade.tachiyomi.ui.recent_updates
 import android.view.View
 import android.widget.PopupMenu
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.glide.GlideApp
@@ -69,6 +66,16 @@ class RecentChapterHolder(private val view: View, private val adapter: RecentCha
         // Set the correct drawable for dropdown and update the tint to match theme.
         chapter_menu_icon.setVectorCompat(R.drawable.ic_more_horiz_black_24dp, view.context.getResourceColor(R.attr.icon_color))
 
+        // Set cover
+        GlideApp.with(itemView.context).clear(manga_cover)
+        if (!item.manga.thumbnail_url.isNullOrEmpty()) {
+            GlideApp.with(itemView.context)
+                    .load(item.manga)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .circleCrop()
+                    .into(manga_cover)
+        }
+
         // Check if chapter is read and set correct color
         if (item.chapter.read) {
             chapter_title.setTextColor(readColor)
@@ -80,18 +87,6 @@ class RecentChapterHolder(private val view: View, private val adapter: RecentCha
 
         // Set chapter status
         notifyStatus(item.status)
-
-        // Set cover
-        GlideApp.with(itemView.context).clear(manga_cover)
-
-        val radius = itemView.context.resources.getDimensionPixelSize(R.dimen.card_radius)
-        val requestOptions = RequestOptions().transform(CenterCrop(), RoundedCorners(radius))
-        GlideApp.with(itemView.context)
-            .load(item.manga.toMangaThumbnail())
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .apply(requestOptions)
-            .dontAnimate()
-            .into(manga_cover)
     }
 
     /**
