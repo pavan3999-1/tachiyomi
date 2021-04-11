@@ -6,15 +6,8 @@ on:
     tags:
       - v*
   pull_request:
-  workflow_dispatch:
-  push:
-    paths-ignore:
-      - '*.md'
-    branches: [ test ]
-  pull_request:
-    paths-ignore:
-      - '*.md'
-    branches: [ test ]
+    branches:
+      - test
 
 jobs:
   check_wrapper:
