@@ -1,4 +1,4 @@
-name: Build job 0.8.5-ss
+name: Build job 0.8.5-test
 
 
 jobs:
@@ -112,9 +112,9 @@ on:
     paths-ignore:
       - '*.md'
       - '*.yml'
-    branches: [ 0.8.5-ss ]
+    branches: [ test ]
   pull_request:
     paths-ignore:
       - '*.md'
       - '*.yml'
-    branches: [ 0.8.5-ss ]
+    branches: [ test ]
