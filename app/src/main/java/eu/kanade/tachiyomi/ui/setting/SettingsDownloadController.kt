@@ -51,7 +51,15 @@ class SettingsDownloadController : SettingsController() {
         switchPreference {
             key = Keys.downloadOnlyOverWifi
             titleRes = R.string.pref_download_only_over_wifi
-            defaultValue = true
+            defaultValue = false
+        }
+        intListPreference {
+            key = Keys.downloadThreads
+            titleRes = R.string.pref_download_slots
+            entries = arrayOf("1", "2", "3", "4", "5", "6", "10", "12", "15", "20")
+            entryValues = arrayOf("1", "2", "3", "4", "5", "6", "10", "12", "15", "20")
+            defaultValue = "1"
+            summary = "%s"
         }
         intListPreference {
             key = Keys.downloadThreads
