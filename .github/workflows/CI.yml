@@ -2,12 +2,12 @@ name: CI
 on:
   push:
     branches:
-      - 0.8.5-ss
+      - 0.8.5
     tags:
       - v*
   pull_request:
     branches:
-      - 0.8.5-ss
+      - 0.8.5
 
 jobs:
   check_wrapper:
