@@ -65,6 +65,7 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
         return manga.title.contains(constraint, true) ||
             (manga.author?.contains(constraint, true) ?: false) ||
             (manga.artist?.contains(constraint, true) ?: false) ||
+            (manga.description?.contains(constraint, true) ?: false) ||
             sourceManager.getOrStub(manga.source).name.contains(constraint, true) ||
             if (constraint.contains(",")) {
                 val genres = manga.genre?.split(", ")
