@@ -32,6 +32,7 @@ import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -49,6 +50,8 @@ import eu.kanade.tachiyomi.util.truncateCenter
 import jp.wasabeef.glide.transformations.CropSquareTransformation
 import jp.wasabeef.glide.transformations.MaskTransformation
 import kotlinx.android.synthetic.main.manga_info_controller.*
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.text.DateFormat
 import java.text.DecimalFormat
@@ -195,10 +198,17 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
         }
 
         // If manga source is known update source TextView.
-        manga_source.text = if (source == null) {
-            view.context.getString(R.string.unknown)
-        } else {
-            source.toString()
+        val mangaSource = source?.toString()
+        with(manga_source) {
+            if (mangaSource != null) {
+                text = mangaSource
+                setOnClickListener {
+                    val sourceManager = Injekt.get<SourceManager>()
+                    performLocalSearch(sourceManager.getOrStub(source.id).name)
+                }
+            } else {
+                text = view.context.getString(R.string.unknown)
+            }
         }
 
         // Update genres list
