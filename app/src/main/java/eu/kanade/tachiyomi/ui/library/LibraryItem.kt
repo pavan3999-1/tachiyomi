@@ -4,26 +4,24 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.RecyclerView
 import com.f2prateek.rx.preferences.Preference
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFilterable
-import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.LibraryManga
 import eu.kanade.tachiyomi.data.preference.getOrDefault
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.widget.AutofitRecyclerView
-import kotlinx.android.synthetic.main.catalogue_grid_item.view.card
-import kotlinx.android.synthetic.main.catalogue_grid_item.view.gradient
+import kotlinx.android.synthetic.main.catalogue_grid_item.view.*
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference<Boolean>) :
-        AbstractFlexibleItem<LibraryHolder>(), IFilterable<String> {
+        AbstractFlexibleItem<LibraryHolder>(), IFilterable {
 
     private val sourceManager: SourceManager = Injekt.get()
+
 
     var downloadCount = -1
 
@@ -34,7 +32,7 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
             R.layout.catalogue_grid_item
     }
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): LibraryHolder {
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<*>): LibraryHolder {
         val parent = adapter.recyclerView
         return if (parent is AutofitRecyclerView) {
             view.apply {
@@ -49,10 +47,11 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
         }
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
+    override fun bindViewHolder(adapter: FlexibleAdapter<*>,
                                 holder: LibraryHolder,
                                 position: Int,
                                 payloads: List<Any?>?) {
+
         holder.onSetValues(this)
     }
 
@@ -70,9 +69,8 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
             if (constraint.contains(",")) {
                 val genres = manga.genre?.split(", ")
                 constraint.split(",").all { containsGenre(it.trim(), genres) }
-            } else {
-                containsGenre(constraint, manga.genre?.split(", "))
             }
+            else containsGenre(constraint, manga.genre?.split(", "))
     }
 
     private fun containsGenre(tag: String, genres: List<String>?): Boolean {
@@ -82,8 +80,7 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
             } == null
         else
             genres?.find {
-                it.trim().toLowerCase() == tag.toLowerCase()
-            } != null
+                it.trim().toLowerCase() == tag.toLowerCase() } != null
     }
 
     override fun equals(other: Any?): Boolean {
