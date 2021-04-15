@@ -2,7 +2,6 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/ext_swipe_refresh">
@@ -12,14 +11,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/extension_card_header"/>
-
-    <eu.davidea.fastscroller.FastScroller
-        android:id="@+id/fast_scroller"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="end"
-        app:fastScrollerBubbleEnabled="false"
-        tools:visibility="visible"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

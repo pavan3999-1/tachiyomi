@@ -15,7 +15,6 @@ import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.util.toast
 import kotlinx.android.synthetic.main.categories_controller.*
-import kotlinx.android.synthetic.main.catalogue_main_controller.fast_scroller
 
 /**
  * Controller to manage the categories for the users' library.
@@ -80,7 +79,6 @@ class CategoryController : NucleusController<CategoryPresenter>(),
         recycler.adapter = adapter
         adapter?.isHandleDragEnabled = true
         adapter?.isPermanentDelete = false
-        adapter?.fastScroller = fast_scroller
 
         fab.clicks().subscribeUntilDestroy {
             CategoryCreateDialog(this@CategoryController).showDialog(router, null)
