@@ -20,6 +20,6 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="end"
         app:fastScrollerBubbleEnabled="false"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
 </eu.kanade.tachiyomi.ui.library.LibraryCategoryView>
