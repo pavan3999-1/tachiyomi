@@ -148,8 +148,6 @@ class LocalSource(private val context: Context) : CatalogueSource {
         return Observable.just(manga)
     }
 
-    override fun fetchMangaDetails(manga: SManga) = Observable.just(manga)
-
     override fun fetchChapterList(manga: SManga): Observable<List<SChapter>> {
         val chapters = getBaseDirectories(context)
                 .mapNotNull { File(it, manga.url).listFiles()?.toList() }
