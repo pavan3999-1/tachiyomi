@@ -34,8 +34,8 @@ class LibraryListHolder(
 
         // Update the unread count and its visibility.
         with(unread_text) {
-            visibility = if (item.unreadCount > 0) View.VISIBLE else View.GONE
-            text = item.unreadCount.toString()
+            visibility = if (item.manga.unread > 0) View.VISIBLE else View.GONE
+            text = item.manga.unread.toString()
         }
         // Update the download count and its visibility.
         with(download_text) {
