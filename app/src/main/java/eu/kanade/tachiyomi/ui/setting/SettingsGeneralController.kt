@@ -51,19 +51,18 @@ class SettingsGeneralController : SettingsController() {
             }
         }
         listPreference {
-                key = Keys.dateFormat
-                titleRes = R.string.pref_date_format
-                entryValues = arrayOf("", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd", "dd MMM yyyy", "MMM dd, yyyy")
-
-                val now = Date().time
-                entries = entryValues.map { value ->
-                    val formattedDate = preferences.dateFormat(value.toString()).format(now)
-                    if (value == "") {
-                        "${context.getString(R.string.system_default)} ($formattedDate)"
-                    } else {
-                        "$value ($formattedDate)"
-                    }
-                }.toTypedArray()
+            key= Keys.dateFormat
+            titleRes = R.string.pref_date_format
+            entryValues = arrayOf("", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd", "dd MMM yyyy", "MMM dd, yyyy", "dddd, dd-MMMM-yyyy hh:mm:ss tt")
+            entries = entryValues.map { value ->
+                if (value == "") {
+                    context.getString(R.string.system_default)
+                } else {
+                    value
+                }
+            }.toTypedArray()
+            defaultValue = ""
+            summary= "%s"
         }
         intListPreference {
             key = Keys.theme
