@@ -22,6 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding.support.v4.widget.refreshes
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.view.longClicks
@@ -140,8 +141,6 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
         manga_summary.longClicks().subscribeUntilDestroy {
             copyToClipboard(view.context.getString(R.string.description), manga_summary.text.toString())
         }
-
-        manga_genres_tags.setOnTagClickListener { tag -> performLocalSearch(tag) }
 
         manga_cover.longClicks().subscribeUntilDestroy {
             copyToClipboard(view.context.getString(R.string.title), presenter.manga.title)
