@@ -24,7 +24,6 @@ import rx.schedulers.Schedulers
 import rx.subjects.BehaviorSubject
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
-import uy.kohesive.injekt.injectLazy
 
 /**
  * This class is the one in charge of downloading chapters.

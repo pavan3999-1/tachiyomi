@@ -61,14 +61,6 @@ class SettingsDownloadController : SettingsController() {
             defaultValue = "6"
             summary = "%s"
         }
-        intListPreference {
-            key = Keys.downloadThreads
-            titleRes = R.string.pref_download_slots
-            entries = arrayOf("1", "2", "3")
-            entryValues = arrayOf("1", "2", "3")
-            defaultValue = "1"
-            summary = "%s"
-        }
         preferenceCategory {
             titleRes = R.string.pref_remove_after_read
 
