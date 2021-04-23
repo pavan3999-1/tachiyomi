@@ -299,7 +299,7 @@ open class BrowseCatalogueController(bundle: Bundle) :
      *
      * @param newQuery the new query.
      */
-    fun searchWithQuery(newQuery: String) {
+    private searchWithQuery(newQuery: String) {
         // If text didn't change, do nothing
         if (presenter.query == newQuery)
             return

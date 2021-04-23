@@ -22,7 +22,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding.support.v4.widget.refreshes
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.view.longClicks
@@ -39,7 +38,6 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.catalogue.browse.BrowseCatalogueController
 import eu.kanade.tachiyomi.ui.catalogue.global_search.CatalogueSearchController
 import eu.kanade.tachiyomi.ui.library.ChangeMangaCategoriesDialog
 import eu.kanade.tachiyomi.ui.library.LibraryController
@@ -142,6 +140,8 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
             copyToClipboard(view.context.getString(R.string.description), manga_summary.text.toString())
         }
 
+        manga_genres_tags.setOnTagClickListener { tag -> performLocalSearch(tag) }
+
         manga_cover.longClicks().subscribeUntilDestroy {
             copyToClipboard(view.context.getString(R.string.title), presenter.manga.title)
         }
@@ -219,7 +219,7 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
                 text = mangaSource
                 setOnClickListener {
                     val sourceManager = Injekt.get<SourceManager>()
-                    performSearch(sourceManager.getOrStub(source.id).name)
+                    performLocalSearch(sourceManager.getOrStub(source.id).name)
                 }
             } else {
                 text = view.context.getString(R.string.unknown)
@@ -227,17 +227,8 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
         }
 
         // Update genres list
-        if (!manga.genre.isNullOrBlank()) {
-            manga_genres_tags.removeAllViews()
-
-            manga.genre?.split(", ")?.forEach { genre ->
-                val chip = Chip(view.context).apply {
-                    text = genre
-                    setOnClickListener { performSearch(genre) }
-                }
-
-                manga_genres_tags.addView(chip)
-            }
+        if (manga.genre.isNullOrBlank().not()) {
+            manga_genres_tags.setTags(manga.genre?.split(", "))
         }
 
         // Update description TextView.
@@ -566,27 +557,16 @@ class MangaInfoController : NucleusController<MangaInfoPresenter>(),
     }
 
     /**
-     * Perform a search using the provided query.
+     * Perform a local search using the provided query.
      *
-     * @param query the search query to the parent controller
+     * @param query the search query to pass to the library controller
      */
-    private fun performSearch(query: String) {
+    private fun performLocalSearch(query: String) {
         val router = parentController?.router ?: return
-
-        if (router.backstackSize < 2) {
-            return
-        }
-
-        val previousController = router.backstack[router.backstackSize - 2].controller()
-        when (previousController) {
-            is LibraryController -> {
-                router.handleBack()
-                previousController.search(query)
-            }
-            is BrowseCatalogueController -> {
-                router.handleBack()
-                previousController.searchWithQuery(query)
-            }
+        val firstController = router.backstack.first()?.controller()
+        if (firstController is LibraryController && router.backstack.size == 2) {
+            router.handleBack()
+            firstController.search(query)
         }
     }
 
