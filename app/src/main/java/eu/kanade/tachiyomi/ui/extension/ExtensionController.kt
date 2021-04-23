@@ -175,7 +175,7 @@ open class ExtensionController : NucleusController<ExtensionPresenter>(),
         drawExtensions()
     }
 
-    private fun drawExtensions() {
+    fun drawExtensions() {
         if (!query.isBlank()) {
             adapter?.updateDataSet(
                     extensions.filter {
