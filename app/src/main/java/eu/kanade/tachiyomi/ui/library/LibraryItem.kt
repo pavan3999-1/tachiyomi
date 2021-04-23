@@ -22,6 +22,7 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
 
     private val sourceManager: SourceManager = Injekt.get()
 
+
     var downloadCount = -1
 
     override fun getLayoutRes(): Int {
@@ -50,6 +51,7 @@ class LibraryItem(val manga: LibraryManga, private val libraryAsList: Preference
                                 holder: LibraryHolder,
                                 position: Int,
                                 payloads: List<Any?>?) {
+
         holder.onSetValues(this)
     }
 

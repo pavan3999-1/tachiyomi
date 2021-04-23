@@ -40,10 +40,12 @@ import uy.kohesive.injekt.injectLazy
  * @param cache the downloads cache, used to add the downloads to the cache after their completion.
  * @param sourceManager the source manager.
  */
-class Downloader(private val context: Context,
-                 private val provider: DownloadProvider,
-                 private val cache: DownloadCache,
-                 private val sourceManager: SourceManager) {
+class Downloader(
+        private val context: Context,
+        private val provider: DownloadProvider,
+        private val cache: DownloadCache,
+        private val sourceManager: SourceManager
+) {
 
     /**
      * Store for persisting downloads across restarts.
@@ -270,7 +272,7 @@ class Downloader(private val context: Context,
      *
      * @param download the chapter to be downloaded.
      */
-    private fun downloadChapter(download: Download): Observable<Download> {
+    private fun downloadChapter(download: Download): Observable<Download> = Observable.defer {
         val chapterDirname = provider.getChapterDirName(download.chapter)
         val mangaDir = provider.getMangaDir(download.manga, download.source)
         val tmpDir = mangaDir.createDirectory("${chapterDirname}_tmp")
@@ -289,7 +291,7 @@ class Downloader(private val context: Context,
             Observable.just(download.pages!!)
         }
 
-        return pageListObservable
+        pageListObservable
                 .doOnNext { _ ->
                     // Delete all temporary (unfinished) files
                     tmpDir.listFiles()
