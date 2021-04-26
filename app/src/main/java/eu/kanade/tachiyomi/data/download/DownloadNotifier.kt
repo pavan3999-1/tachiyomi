@@ -94,7 +94,7 @@ internal class DownloadNotifier(private val context: Context) {
      */
     fun downloadFinished() {
         // Create notification
-        with(notificationBuilder) {
+        with(notification) {
             setContentTitle(context.getString(R.string.download_notifier_downloader_title))
             setContentText(context.getString(R.string.download_notifier_download_finish))
             setSmallIcon(android.R.drawable.stat_sys_download_done)
@@ -103,7 +103,7 @@ internal class DownloadNotifier(private val context: Context) {
             setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
         }
-        notificationBuilder.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
+        NotificationCompat.Builder.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
 
         // Reset states to default
         errorThrown = false
