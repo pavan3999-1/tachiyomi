@@ -239,11 +239,9 @@ internal class DownloadNotifier(private val context: Context) {
             setContentIntent(NotificationReceiver.openChapterPendingBroadcast(context, download.manga, download.chapter))
             setProgress(0, 0, false)
             }
-            notification.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
-        }
 
         // Show notification.
-        notification.show()
+        notification.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
 
         // Reset initial values
         isDownloading = false
