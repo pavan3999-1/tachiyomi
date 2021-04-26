@@ -223,9 +223,7 @@ internal class DownloadNotifier(private val context: Context) {
      */
     fun onComplete(download: Download, queue: DownloadQueue) {
         // Check if last download
-        if (!queue.isEmpty()) {
-            return
-        }
+        if (!errorThrown) {
         // Create notification.
         with(notification) {
             val title = download.manga.title.chop(15)
