@@ -53,7 +53,7 @@ class SettingsGeneralController : SettingsController() {
         listPreference {
             key= Keys.dateFormat
             titleRes = R.string.pref_date_format
-            entryValues = arrayOf("", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd", "dd MMM yyyy", "MMM dd, yyyy", "dd-MMMM-yyyy")
+            entryValues = arrayOf("", "MM/dd/yy HH:mm", "dd/MM/yy HH:mm", "yyyy-MM-dd HH:mm", "dd MMM yyyy HH:mm", "MMM dd, yyyy HH:mm", "dd-MMMM-yyyy HH:mm")
             entries = entryValues.map { value ->
                 if (value == "") {
                     context.getString(R.string.system_default)
