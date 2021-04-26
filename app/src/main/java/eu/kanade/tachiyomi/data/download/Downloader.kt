@@ -140,7 +140,7 @@ class Downloader(
             } else if (notifier.isSingleChapter && !notifier.errorThrown) {
                 notifier.isSingleChapter = false
             } else {
-                notifier.onComplete()
+                notifier.onComplete(download, queue)
             }
         }
     }
@@ -454,7 +454,7 @@ class Downloader(
         }
         if (areAllDownloadsFinished()) {
             if (notifier.isSingleChapter && !notifier.errorThrown) {
-                notifier.onDownloadCompleted(download, queue)
+                notifier.onComplete(download, queue)
             }
             DownloadService.stop(context)
         }
