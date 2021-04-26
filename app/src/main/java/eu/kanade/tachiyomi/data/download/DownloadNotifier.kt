@@ -103,7 +103,7 @@ internal class DownloadNotifier(private val context: Context) {
             setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
         }
-        NotificationCompat.Builder.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
+        notification.show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
 
         // Reset states to default
         errorThrown = false
