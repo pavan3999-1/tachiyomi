@@ -46,7 +46,6 @@ class MangaWebViewController(bundle: Bundle? = null) : BaseController(bundle) {
         web.settings.setAppCacheEnabled(true)
         web.settings.useWideViewPort = true
         web.settings.loadWithOverviewMode = true
-        web.settings.cacheMode(WebSettings.LOAD_DEFAULT)
         web.settings.setSupportZoom(true)
         web.settings.setBuiltInZoomControls(true)
         web.settings.setDisplayZoomControls(false)
