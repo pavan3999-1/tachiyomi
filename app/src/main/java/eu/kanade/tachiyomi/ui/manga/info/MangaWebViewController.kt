@@ -46,11 +46,13 @@ class MangaWebViewController(bundle: Bundle? = null) : BaseController(bundle) {
         web.settings.setAppCacheEnabled(true)
         web.settings.useWideViewPort = true
         web.settings.loadWithOverviewMode = true
-        web.settings.cacheMode = WebSettings.LOAD_DEFAULT
+        web.settings.cacheMode(WebSettings.LOAD_DEFAULT)
         web.settings.setSupportZoom(true)
         web.settings.setBuiltInZoomControls(true)
         web.settings.setDisplayZoomControls(false)
         web.settings.setBuiltInZoomControls(true)
+        web.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY)
+        web.setScrollbarFadingEnabled(false)
         web.settings.userAgentString = source.headers["User-Agent"]
         web.loadUrl(url, headers)
     }
